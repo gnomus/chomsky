@@ -1,0 +1,31 @@
+---
+
+- name: install docker dependencies
+  apt:
+    cache_valid_time: 3600
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - gnupg2
+    - software-properties-common
+
+- name: import docker repo PGP key
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: 0EBFCD88
+
+- name: import docker repo
+  apt_repository:
+    repo: deb https://download.docker.com/linux/debian stable
+    state: present
+    validate_certs: yes
+
+- name: install docker engine
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - docker-ce
