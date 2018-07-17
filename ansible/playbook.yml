@@ -2,3 +2,4 @@
   roles:
     - docker
     - ssh
+    - fail2ban

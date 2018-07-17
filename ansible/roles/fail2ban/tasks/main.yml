@@ -1,0 +1,12 @@
+- name: install
+  apt:
+    name: fail2ban=0.9.6-2
+    state: present
+    update_cache: true
+
+- name: enable and start service
+  systemd:
+    name: fail2ban
+    daemon_reload: true
+    enabled: true
+    state: started
