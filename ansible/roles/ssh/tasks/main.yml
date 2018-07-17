@@ -1,0 +1,7 @@
+- name: Authorized Keys
+  authorized_key:
+    user: root
+    state: present
+    manage_dir: true
+    exclusive: true
+    key: "{{ lookup('file', 'authorized_keys') }}"
