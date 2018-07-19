@@ -18,7 +18,7 @@ services:
       TS3SERVER_LICENSEPATH: /run/secrets/tslicense
     secrets:
       - tslicense
-  db:
+  database:
     image: mariadb
     environment:
       MYSQL_ROOT_PASSWORD: password
