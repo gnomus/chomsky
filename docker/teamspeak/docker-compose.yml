@@ -17,10 +17,13 @@ services:
       TS3SERVER_LICENSE: accept
       TS3SERVER_LICENSEPATH: /run/secrets/tslicense
     secrets:
-      tslicense:
-        external: true
+      - tslicense:
   db:
     image: mariadb
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: teamspeak
+
+secrets:
+  tslicense:
+    external: true
