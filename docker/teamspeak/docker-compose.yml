@@ -6,7 +6,7 @@ services:
       - 9987:9987/udp
       - 30033:30033
       - 10011:10011
-   environment:
+    environment:
       TS3SERVER_DB_PLUGIN: ts3db_mariadb
       TS3SERVER_DB_SQLCREATEPATH: create_mariadb
       TS3SERVER_DB_HOST: database
