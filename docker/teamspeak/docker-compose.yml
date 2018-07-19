@@ -15,15 +15,24 @@ services:
       TS3SERVER_DB_NAME: teamspeak
       TS3SERVER_DB_WAITUNTILREADY: 30s
       TS3SERVER_LICENSE: accept
-      TS3SERVER_LICENSEPATH: /run/secrets/tslicense
+      TS3SERVER_LICENSEPATH: /run/secrets
     secrets:
-      - tslicense
+      - source: tslicense
+        target: /run/secrets/licensekey.dat
+    volumes:
+      - ts3files:/var/ts3server
   database:
     image: mariadb
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: teamspeak
+    volumes:
+      - ts3database:/var/lib/mysql
 
 secrets:
   tslicense:
     external: true
+
+volumes:
+  ts3database:
+  ts3files:
