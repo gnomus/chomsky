@@ -17,7 +17,7 @@ services:
       TS3SERVER_LICENSE: accept
       TS3SERVER_LICENSEPATH: /run/secrets/tslicense
     secrets:
-      - tslicense:
+      - tslicense
   db:
     image: mariadb
     environment:
