@@ -16,7 +16,7 @@ services:
       TS3SERVER_DB_WAITUNTILREADY: 30s
       TS3SERVER_LICENSE: accept
       TS3SERVER_LICENSEPATH: /run/secrets/tslicense
-   secrets:
+    secrets:
       tslicense:
         external: true
   db:
