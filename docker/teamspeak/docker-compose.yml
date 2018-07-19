@@ -1,0 +1,26 @@
+version: '3.6'
+services:
+  teamspeak:
+    image: teamspeak:3.2.0
+    ports:
+      - 9987:9987/udp
+      - 30033:30033
+      - 10011:10011
+   environment:
+      TS3SERVER_DB_PLUGIN: ts3db_mariadb
+      TS3SERVER_DB_SQLCREATEPATH: create_mariadb
+      TS3SERVER_DB_HOST: database
+      TS3SERVER_DB_USER: root
+      TS3SERVER_DB_PASSWORD: password
+      TS3SERVER_DB_NAME: teamspeak
+      TS3SERVER_DB_WAITUNTILREADY: 30s
+      TS3SERVER_LICENSE: accept
+      TS3SERVER_LICENSEPATH: /run/secrets/tslicense
+   secrets:
+      tslicense:
+        external: true
+db:
+  image: mariadb
+  environment:
+    MYSQL_ROOT_PASSWORD: password
+    MYSQL_DATABASE: teamspeak
