@@ -19,8 +19,8 @@ services:
    secrets:
       tslicense:
         external: true
-db:
-  image: mariadb
-  environment:
-    MYSQL_ROOT_PASSWORD: password
-    MYSQL_DATABASE: teamspeak
+  db:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: teamspeak
