@@ -2,17 +2,15 @@ version: "3.6"
 
 services:
   nextcloud:
-    image: nextcloud:fpm
+    image: nextcloud
     volumes:
       - nextcloud:/var/www/html
+    networks:
+      - proxy
     deploy:
-      mode: global
-      update_config:
-        parallelism: 1
-        delay: 60s
       labels:
         - "traefik.enable=true"
-        - "traefik.port=9000"
+        - "traefik.port=80"
         - "traefik.docker.network=proxy"
         - "traefik.frontend.rule=Host:own.m3philis.com"
 
