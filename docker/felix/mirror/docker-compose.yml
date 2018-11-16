@@ -1,0 +1,27 @@
+version: "3.6"
+
+services:
+  web:
+    image: nginx:latest
+    volumes:
+      - mirror:/usr/share/nginx/html:ro
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.port=80"
+        - "traefik.docker.network=proxy"
+        - "traefik.frontend.rule=Host:mirror.gnomus.systems"
+    networks:
+      - proxy
+  cron:
+    image: gnomus/archmirror-cron:latest
+    volumes:
+      - mirror:/mirror
+
+
+networks:
+  proxy:
+    external: true
+
+volumes:
+  mirror:
