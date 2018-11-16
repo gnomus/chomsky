@@ -1,0 +1,41 @@
+version: "3.6"
+
+services:
+  database:
+    image: postgres:9.6-alpine
+    environment:
+      - POSTGRES_USER=hackmd
+      - POSTGRES_PASSWORD=example
+      - POSTGRES_DB=hackmd
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      backend:
+  app:
+    image: hackmdio/hackmd@sha256:5a1fa67b2368f57f9fc255f03c90f221d2ef7ba3dfb0b0be186ba51e3435055c
+    environment:
+      - CMD_DB_URL=postgres://hackmd:example@database:5432/hackmd
+      - CMD_EMAIL=false
+      - CMD_ALLOW_EMAIL_REGISTER=false
+      - CMD_IMAGE_UPLOAD_TYPE=filesystem
+      - CMD_ALLOW_FREEURL=true
+    volumes:
+      - images:/codimd/public/uploads
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.port=3000"
+        - "traefik.docker.network=proxy"
+        - "traefik.frontend.rule=Host:pads.c3boc.de"
+    networks:
+      proxy:
+      backend:
+
+networks:
+  proxy:
+    external: true
+  backend:
+
+volumes:
+  db:
+  images:

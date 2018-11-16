@@ -1,0 +1,31 @@
+version: "3.6"
+
+services:
+  doku:
+    image: mprasil/dokuwiki:latest
+    volumes:
+    - data:/dokuwiki/data
+    - conf:/dokuwiki/conf
+    - plugins:/dokuwiki/lib/plugins
+    - tpl:/dokuwiki/lib/tpl
+    - logs:/var/log
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.port=80"
+        - "traefik.docker.network=proxy"
+        - "traefik.frontend.rule=Host:wiki.c3boc.de"
+    networks:
+      - proxy
+
+
+networks:
+  proxy:
+    external: true
+
+volumes:
+  data:
+  conf:
+  plugins:
+  tpl:
+  logs:
