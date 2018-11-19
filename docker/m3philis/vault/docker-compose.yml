@@ -12,47 +12,37 @@ services:
     secrets:
       - source: vault_config
         target: /vault/config/vault_config.hcl
-    restart: on-failure
     deploy:
       labels:
         - "traefik.enable=true"
-        - "traefik.port=443"
+        - "traefik.port=8200"
         - "traefik.docker.network=proxy"
         - "traefik.frontend.rule=Host:vault.chaos.sh"
 
   mysql:
     image: mysql:5.7.24
-    expose:
-      - 3306
     environment:
       - MYSQL_RANDOM_ROOT_PASSWORD=yes
       - MYSQL_USER=vault
-      - MYSQL_PASSWORD_FILE=/run/secrets/db_user_password
+      - MYSQL_PASSWORD_FILE=/run/secrets/mysql_user_password
       - MYSQL_DATABASE=vault
     networks:
       - backend
     secrets:
-      - db_user_password
-    restart: on-failure
+      - mysql_user_password
     volumes:
       - mysql:/var/lib/mysql
-    deploy:
-      labels:
-        - "traefik.enable=false"
 
 networks:
   proxy:
     external: true
   backend:
-    driver: bridge
 
 secrets:
   vault_config:
-    external:
-      name: m3philis_chaos_vault_config
+    name: m3philis_chaos_vault_config
   mysql_user_password:
-    external:
-      name: m3philis_chaos_vault_mysql_password
+    name: m3philis_chaos_vault_mysql_password
 
 volumes:
   mysql:
