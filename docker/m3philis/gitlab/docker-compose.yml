@@ -1,0 +1,62 @@
+version: '3'
+
+services:
+
+  web:
+    image: 'gitlab/gitlab-ce:latest'
+    restart: always
+    hostname: 
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'https://gitlab.chaos.sh'
+        gitlab_rails['usage_ping_enabled'] = false
+        gitlab_rails['initial_root_password'] = password
+        gitlab_rails['initial_shared_runners_registration_token'] = token
+        gitlab_rails['db_database'] = gitlab
+        gitlab_rails['db_password'] = db_password
+        gitlab_rails['db_host'] = postgresql
+        gitlab_rails['redis_host'] = redis
+        registry_external_url = 'https://registry.chaos.sh'
+        gitlab_rails['registry_host'] = "registry.chaos.sh"
+        postgresql['enable'] = false
+        redis['enable'] = false
+        nginx['enable'] = false
+        gitaly['enable'] = false     
+    networks:
+      - proxy
+      - gitlab
+    ports:
+      - target: 22
+        published: 2222
+        protocol: tcp
+        mode: host
+    volumes:
+      - gitlab/config:/etc/gitlab
+      - gitlab/logs:/var/log/gitlab
+      - gitlab/data:/var/opt/gitlab
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.docker.network=proxy"
+        - "traefik.gitlab.port=80"
+        - "traefik.gitlab.frontend.rule=Host:gitlab.chaos.sh"
+        - "traefik.registry.port=5005"
+        - "traefik.registry.frontend.rule=Host:registry.chaos.sh"
+
+  postgresql:
+    image: postgres:10.5-alpine
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db_password
+      - POSTGRES_USER=gitlab
+      - POSTGRES_DB=gitlab
+
+  redis:
+
+networks:
+  proxy:
+    external: true
+  gitlab:
+
+volumes:
+  gitlab:
